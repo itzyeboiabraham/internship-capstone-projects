@@ -6,6 +6,7 @@ on:
     paths:
       - "configmaster/**"
       - ".github/workflows/configmaster.yml"
+
   pull_request:
     branches: [main, "intern/**", "interns/**"]
     paths:
@@ -21,17 +22,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
           java-version: "21"
           cache: maven
+
       - run: mvn -B test
 
   sast:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: returntocorp/semgrep-action@v1
         with:
           config: "p/java"
@@ -42,23 +46,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Check for Dockerfile
-        id: dockerfile
-        shell: bash
-        run: |
-          if [ -f configmaster/Dockerfile ]; then
-            echo "exists=true" >> "$GITHUB_OUTPUT"
-          else
-            echo "exists=false" >> "$GITHUB_OUTPUT"
-          fi
-
       - name: Build container
-        if: steps.dockerfile.outputs.exists == 'true'
         run: docker build -t configmaster:ci .
-        working-directory: configmaster
 
       - name: Scan container
-        if: steps.dockerfile.outputs.exists == 'true'
         uses: aquasecurity/trivy-action@master
         with:
           image-ref: "configmaster:ci"

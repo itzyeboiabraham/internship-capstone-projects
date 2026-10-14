@@ -160,7 +160,7 @@ class ConfigMasterCliTest {
 
         Files.writeString(spec, """
                 {
-                  "schemaVersion": "1.0",
+                  "schemaVersion": "1.0.0",
                   "client": "GenKey",
                   "requiredFields": [
                     "app.port"

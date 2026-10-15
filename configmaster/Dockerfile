@@ -15,7 +15,7 @@ WORKDIR /app
 
 RUN useradd --system --uid 10001 --create-home configmaster
 
-COPY --from=build /build/target/configmaster-0.1.0.jar /app/configmaster.jar
+COPY --from=build /build/target/configmaster-1.0.0.jar /app/configmaster.jar
 COPY --from=build /build/target/dependency /app/lib
 COPY config/client-spec.json /app/config/client-spec.json
 
